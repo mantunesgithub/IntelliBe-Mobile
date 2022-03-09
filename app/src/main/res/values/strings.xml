@@ -1,0 +1,19 @@
+<resources>
+<string name="remover">Remover</string>
+<string name="salvar_cliente">Salvar o cliente</string>
+<string name="app_name">IntelliBe</string>
+<string name="tipo_pessoa_PJ_PF">Tipo pessoa  PJ / PF</string>
+<string name="cnpj_cpf">Cnpj / Cpf</string>
+<string name="nome">Razao Social / Nome </string>
+<string name="telefone_fixo">Telefone Fixo</string>
+<string name="telefone_celular">Telefone Celular</string>
+<string name="telefone_comercial">Telefone Comercial</string>
+<string name="site">Site (PJ) / E-mail (PF)</string>
+<string name="endereco">Endereco</string>
+<string name="complemento">Complemento</string>
+<string name="bairro">Bairro</string>
+<string name="cidade">Cidade</string>
+<string name="estado">Estado</string>
+<string name="pais">Pais</string>
+<string name="cep">Cep</string>
+</resources>
