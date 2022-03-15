@@ -41,9 +41,6 @@ public class ListaClientesView {
         this.adapter = new ListaClienteAdapter(this.context);
         dao = ClienteDatabase.getInstance(context)
                 .getClienteDAO();
-//        daoTelefone = ClienteDatabase.getInstance(context)
-//                .getTelefoneDAO();
-
     }
 
     public void atualizaClientes() {
@@ -127,7 +124,8 @@ public class ListaClientesView {
     private void visualizaMapa(MenuItem item, Cliente clienteEscolhido) {
 
         Intent intentMapa = new Intent(Intent.ACTION_VIEW);
-        intentMapa.setData(Uri.parse("geo:0,0?q=" + clienteEscolhido.getEndereco()));
+        intentMapa.setData(Uri.parse("geo:0,0?q=" + clienteEscolhido.getEndereco() +
+                                            " " + clienteEscolhido.getCidade()));
         //item.setIntent(intentMapa);
         context.startActivity(intentMapa);
     }

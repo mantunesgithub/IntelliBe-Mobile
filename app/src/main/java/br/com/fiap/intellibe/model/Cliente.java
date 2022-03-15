@@ -172,6 +172,7 @@ public class Cliente implements Serializable {
     }
 
     public Integer checkTipoPessoa(String tipoPessoa)  {
+        tipoPessoa = tipoPessoa.toUpperCase();
         if  (  !(tipoPessoa.equals("PJ"))  &&  !(tipoPessoa.equals("PF"))  ) {
             throw new DominioException("Tipo de pessoa deve ser 'PJ' ou  'PF'");
         }
