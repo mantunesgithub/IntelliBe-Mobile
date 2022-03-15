@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="br.com.fiap.intellibe"
     tools:ignore="GoogleAppIndexingWarning">
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.AC"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,6 +22,22 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.FormularioClienteActivity" />
+
+        <!-- FileProvider -->
+        <provider
+            android:name=".clienteprovider.GenericFileProvider"
+            android:authorities="${applicationId}.clienteprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        <receiver android:name=".receiver.SMSReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -3,4 +3,16 @@
     <item
         android:id="@+id/activity_lista_clientes_menu_remover"
         android:title="@string/remover" />
+    <item
+        android:id="@+id/activity_lista_clientes_menu_site"
+        android:title="@string/visitar_site" />
+    <item
+        android:id="@+id/activity_lista_clientes_menu_sms"
+        android:title="@string/enviar_sms" />
+    <item
+        android:id="@+id/activity_lista_clientes_menu_mapa"
+        android:title="@string/visualizar_mapa" />
+    <item
+        android:id="@+id/activity_lista_clientes_menu_ligar"
+        android:title="@string/efetuar_ligacao" />
 </menu>

@@ -15,7 +15,7 @@ import br.com.fiap.intellibe.model.Telefone;
 
 import static br.com.fiap.intellibe.database.ClienteMigrations.TODAS_MIGRATIONS;
 
-@Database(entities = {Cliente.class, Telefone.class}, version = 6, exportSchema = false)
+@Database(entities = {Cliente.class, Telefone.class}, version = 7, exportSchema = false)
 @TypeConverters({ConversorCalendar.class, ConversorTipoTelefone.class})
 public abstract class ClienteDatabase extends RoomDatabase {
 
@@ -26,7 +26,7 @@ public abstract class ClienteDatabase extends RoomDatabase {
     public static ClienteDatabase getInstance(Context context) {
         return Room
                 .databaseBuilder(context, ClienteDatabase.class, NOME_BANCO_DE_DADOS)
-//                .addMigrations(TODAS_MIGRATIONS)
+                .addMigrations(TODAS_MIGRATIONS)
                 .build();
     }
 }

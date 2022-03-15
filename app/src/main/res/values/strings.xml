@@ -1,5 +1,9 @@
 <resources>
 <string name="remover">Remover</string>
+<string name="visitar_site">Visitar Site / Email</string>
+<string name="enviar_sms">Enviar SMS</string>
+<string name="visualizar_mapa">Visualizar no Mapa</string>
+<string name="efetuar_ligacao">Ligar</string>
 <string name="salvar_cliente">Salvar o cliente</string>
 <string name="app_name">IntelliBe</string>
 <string name="tipo_pessoa_PJ_PF">Tipo pessoa  PJ / PF</string>

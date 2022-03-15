@@ -20,9 +20,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/ic_camera"
-                android:visibility="visible" />
-
+                android:background="@drawable/ic_fundo_camera" />
             <ImageView
                 android:id="@+id/formulario_cliente_foto"
                 android:layout_width="match_parent"

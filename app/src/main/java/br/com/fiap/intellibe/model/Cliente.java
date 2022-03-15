@@ -24,15 +24,15 @@ public class Cliente implements Serializable {
     private String telefoneFixo;
     private String telefoneCelular;
     private String telefoneComercial;
+    private String caminhoFoto;
 
     public Cliente() {
     }
 
-    @Ignore
     public Cliente(Long cnpjOuCpf, Integer tipoPessoa, String nome, String site, String endereco,
                    String complemento, String bairro, String cidade, String estado, String pais,
-                   String cep, String telefoneCelular, String telefoneFixo, String telefoneComercial){
-
+                   String cep, String telefoneFixo, String telefoneCelular,
+                   String telefoneComercial, String caminhoFoto) {
         this.cnpjOuCpf = cnpjOuCpf;
         this.tipoPessoa = tipoPessoa;
         this.nome = nome;
@@ -47,7 +47,10 @@ public class Cliente implements Serializable {
         this.telefoneFixo = telefoneFixo;
         this.telefoneCelular = telefoneCelular;
         this.telefoneComercial = telefoneComercial;
+        this.caminhoFoto = caminhoFoto;
     }
+
+
 
     public Long getCnpjOuCpf() {
         return cnpjOuCpf;
@@ -158,6 +161,14 @@ public class Cliente implements Serializable {
 
     public void setTelefoneComercial(String telefoneComercial) {
         this.telefoneComercial = telefoneComercial;
+    }
+
+    public String getCaminhoFoto() {
+        return caminhoFoto;
+    }
+
+    public void setCaminhoFoto(String caminhoFoto) {
+        this.caminhoFoto = caminhoFoto;
     }
 
     public Integer checkTipoPessoa(String tipoPessoa)  {

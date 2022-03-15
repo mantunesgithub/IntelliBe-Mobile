@@ -8,6 +8,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 import br.com.fiap.intellibe.model.Cliente;
+import br.com.fiap.intellibe.model.Telefone;
+
 @Dao
 public interface ClienteDAO {
     @Insert
@@ -15,6 +17,9 @@ public interface ClienteDAO {
 
     @Query("SELECT * FROM Cliente")
     List<Cliente> todos();
+
+    @Query("SELECT cnpjOuCpf FROM Cliente WHERE telefoneCelular = :foneCelular LIMIT 1;" )
+    List<Cliente> buscaClientePorTelefone(String foneCelular);
 
     @Delete
     void remove(Cliente cliente);

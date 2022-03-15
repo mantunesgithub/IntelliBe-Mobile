@@ -1,18 +1,28 @@
 package br.com.fiap.intellibe.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import br.com.fiap.intellibe.BuildConfig;
 import br.com.fiap.intellibe.R;
 import br.com.fiap.intellibe.asynctask.BuscaTodosTelefonesDoClienteTask;
 import br.com.fiap.intellibe.asynctask.EditaClienteTask;
@@ -32,6 +42,7 @@ public class FormularioClienteActivity extends AppCompatActivity {
 
     private static final String TITULO_APPBAR_NOVO_CLIENTE = "Novo cliente";
     private static final String TITULO_APPBAR_EDITA_CLIENTE = "Edita cliente";
+    private static final int CODIGO_CAMERA = 567;
     private ClienteDAO clienteDAO;
     private TelefoneDAO telefoneDAO;
     private Cliente cliente;
@@ -52,6 +63,8 @@ public class FormularioClienteActivity extends AppCompatActivity {
     private EditText campoCidade;
     private EditText campoEstado;
     private EditText campoPais;
+    private String caminhoFoto;
+    private ImageView campoCaminhoFoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +76,37 @@ public class FormularioClienteActivity extends AppCompatActivity {
         telefoneDAO = database.getTelefoneDAO();
         inicializacaoDosCampos();
         carregaCliente();
+        abrirCamera();
     }
+
+    private void abrirCamera() {
+        Button botaoFoto = (Button) findViewById(R.id.formulario_cliente_botao_foto);
+        botaoFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                caminhoFoto = getExternalFilesDir(null) + "/" +
+                        System.currentTimeMillis() + ".jpg";
+                File arquivoFoto = new File(caminhoFoto);
+                intentCamera.putExtra(MediaStore.EXTRA_OUTPUT,
+                        FileProvider.getUriForFile(FormularioClienteActivity.this,
+                                BuildConfig.APPLICATION_ID + ".clienteprovider", arquivoFoto));
+                startActivityForResult(intentCamera, CODIGO_CAMERA);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CODIGO_CAMERA) {
+                carregaImagem(caminhoFoto);
+            }
+        }
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -71,6 +114,7 @@ public class FormularioClienteActivity extends AppCompatActivity {
                 .inflate(R.menu.activity_formulario_cliente_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -80,6 +124,7 @@ public class FormularioClienteActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void carregaCliente() {
 
         Intent dados = getIntent();
@@ -95,8 +140,7 @@ public class FormularioClienteActivity extends AppCompatActivity {
 
     private void preencheCampos() {
 
-        System.out.println("Cliente tipo de pessoa= " + cliente);
-        campoTipoPessoa.setText(cliente.getTipoPessoa().equals(1)? "PF" : "PJ");
+        campoTipoPessoa.setText(cliente.getTipoPessoa().equals(1) ? "PF" : "PJ");
 
 //      Verifica se cnpj ou cpf válido, se valido formata cnpj/cpf para exibir tela
 
@@ -111,25 +155,40 @@ public class FormularioClienteActivity extends AppCompatActivity {
         campoCidade.setText(cliente.getCidade());
         campoEstado.setText(cliente.getEstado());
         campoPais.setText(cliente.getPais());
+        carregaImagem(cliente.getCaminhoFoto());
         preencheCamposDeTelefone();
+    }
+    private void carregaImagem(String caminhoFoto) {
+        if (caminhoFoto != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(caminhoFoto);
+            Bitmap bitmapReduzido = Bitmap.createScaledBitmap
+                    (bitmap, 300, 300, true);
+            campoCaminhoFoto.setImageBitmap(bitmapReduzido);
+            campoCaminhoFoto.setScaleType(ImageView.ScaleType.FIT_XY);
+            campoCaminhoFoto.setTag(caminhoFoto);
+        }
     }
 
     private void preencheCamposDeTelefone() {
-        new BuscaTodosTelefonesDoClienteTask(telefoneDAO, cliente, telefones -> {
-            this.telefonesDoCliente = telefones;
-            for (Telefone telefone :
-                    telefonesDoCliente) {
-                if (telefone.getTipo() == TipoTelefone.FIXO) {
-                    campoTelefoneFixo.setText(telefone.getNumero());
-                } else {
-                    if (telefone.getTipo() == TipoTelefone.CELULAR) {
-                        campoTelefoneCelular.setText(telefone.getNumero());
-                    } else {
-                        campoTelefoneComercial.setText(telefone.getNumero());
+        new BuscaTodosTelefonesDoClienteTask(telefoneDAO, cliente,
+                new BuscaTodosTelefonesDoClienteTask.TelefonesDoAlunoEncontradosListener() {
+                    @Override
+                    public void quandoEncontrados(List<Telefone> telefones) {
+                        FormularioClienteActivity.this.telefonesDoCliente = telefones;
+                        for (Telefone telefone :
+                                telefonesDoCliente) {
+                            if (telefone.getTipo() == TipoTelefone.FIXO) {
+                                campoTelefoneFixo.setText(telefone.getNumero());
+                            } else {
+                                if (telefone.getTipo() == TipoTelefone.CELULAR) {
+                                    campoTelefoneCelular.setText(telefone.getNumero());
+                                } else {
+                                    campoTelefoneComercial.setText(telefone.getNumero());
+                                }
+                            }
+                        }
                     }
-                }
-            }
-        }).execute();
+                }).execute();
     }
 
     private void finalizaFormulario() {
@@ -149,10 +208,10 @@ public class FormularioClienteActivity extends AppCompatActivity {
             }
 
         } catch (DominioException e) {
-            Toast.makeText(this, "Campo Invalido - " + e.getMessage() ,
+            Toast.makeText(this, "Campo Invalido - " + e.getMessage(),
                     Toast.LENGTH_SHORT).show();
         } catch (RuntimeException e) {
-            Toast.makeText(this, "Erro Inesperado - " + e.getMessage() ,
+            Toast.makeText(this, "Erro Inesperado - " + e.getMessage(),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -162,7 +221,6 @@ public class FormularioClienteActivity extends AppCompatActivity {
         return new Telefone(numeroFixo,
                 fixo);
     }
-
     private void salvaCliente(Telefone telefoneFixo, Telefone telefoneCelular,
                               Telefone telefoneComercial) {
         new SalvaClienteTask(clienteDAO, cliente, telefoneFixo, telefoneComercial,
@@ -186,7 +244,7 @@ public class FormularioClienteActivity extends AppCompatActivity {
         campoSite = findViewById(R.id.activity_formulario_cliente_site);
         campoTelefoneFixo = findViewById(R.id.activity_formulario_cliente_telefone_fixo);
         campoTelefoneCelular = findViewById(R.id.activity_formulario_cliente_telefone_celular);
-        campoTelefoneComercial=findViewById(R.id.activity_formulario_cliente_telefone_comercial);
+        campoTelefoneComercial = findViewById(R.id.activity_formulario_cliente_telefone_comercial);
         campoCep = findViewById(R.id.activity_formulario_cliente_cep);
         campoEndereco = findViewById(R.id.activity_formulario_cliente_endereco);
         campoComplemento = findViewById(R.id.activity_formulario_cliente_complemento);
@@ -194,9 +252,10 @@ public class FormularioClienteActivity extends AppCompatActivity {
         campoCidade = findViewById(R.id.activity_formulario_cliente_cidade);
         campoEstado = findViewById(R.id.activity_formulario_cliente_estado);
         campoPais = findViewById(R.id.activity_formulario_cliente_pais);
+        campoCaminhoFoto = findViewById(R.id.formulario_cliente_foto);
     }
 
-    private void preencheCliente()  {
+    private void preencheCliente() {
 
         String tipoPessoa = campoTipoPessoa.getText().toString();
         Integer tipoPessoaConvertido = cliente.checkTipoPessoa(tipoPessoa);
@@ -215,5 +274,6 @@ public class FormularioClienteActivity extends AppCompatActivity {
         cliente.setCidade(campoCidade.getText().toString());
         cliente.setEstado(campoEstado.getText().toString());
         cliente.setPais(campoPais.getText().toString());
+        cliente.setCaminhoFoto((String) campoCaminhoFoto.getTag());
     }
 }

@@ -1,16 +1,23 @@
 package br.com.fiap.intellibe.ui.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import br.com.fiap.intellibe.R;
 import br.com.fiap.intellibe.model.Cliente;
 import br.com.fiap.intellibe.ui.ListaClientesView;
@@ -38,17 +45,13 @@ public class ListaClientesActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(final MenuItem item) {
 
-        int itemId = item.getItemId();
-        if (itemId == R.id.activity_lista_clientes_menu_remover) {
-            listaClientesView.confirmaRemocao(item);
-        }
-
-        return super.onContextItemSelected(item);
+        listaClientesView.selecionaItemMenu(item);
+        return super.onOptionsItemSelected(item);
     }
-
     private void configuraFabNovoCliente() {
+
         FloatingActionButton botaoNovoCliente =
                 findViewById(R.id.activity_lista_clientes_fab_novo_cliente);
         botaoNovoCliente.setOnClickListener(view -> abreFormularioModoInsereCliente());
@@ -65,7 +68,7 @@ public class ListaClientesActivity extends AppCompatActivity {
     }
 
     private void configuraLista() {
-        
+
         ListView listaDeCliente = findViewById(R.id.activity_lista_clientes_listview);
         listaClientesView.configuraAdapter(listaDeCliente);
         configuraListenerDeCliquePorItem(listaDeCliente);
