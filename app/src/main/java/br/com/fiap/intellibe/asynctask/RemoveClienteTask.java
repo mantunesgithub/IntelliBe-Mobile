@@ -4,16 +4,16 @@ import android.os.AsyncTask;
 
 import br.com.fiap.intellibe.database.dao.ClienteDAO;
 import br.com.fiap.intellibe.model.Cliente;
-import br.com.fiap.intellibe.ui.adapter.ListaClienteAdapter;
+import br.com.fiap.intellibe.ui.recyclerview.adapter.ListaClientesAdapter;
 
 public class RemoveClienteTask extends AsyncTask<Void, Void, Void> {
 
     private final ClienteDAO dao;
-    private final ListaClienteAdapter adapter;
+    private final ListaClientesAdapter adapter;
     private final Cliente cliente;
 
     public RemoveClienteTask(ClienteDAO dao,
-                             ListaClienteAdapter adapter,
+                             ListaClientesAdapter adapter,
                              Cliente cliente) {
         this.dao = dao;
         this.adapter = adapter;

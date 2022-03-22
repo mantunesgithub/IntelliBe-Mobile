@@ -40,8 +40,8 @@ import static br.com.fiap.intellibe.ui.activity.ConstantesActivities.CHAVE_CLIEN
 
 public class FormularioClienteActivity extends AppCompatActivity {
 
-    private static final String TITULO_APPBAR_NOVO_CLIENTE = "Novo cliente";
-    private static final String TITULO_APPBAR_EDITA_CLIENTE = "Edita cliente";
+    private static final String TITULO_APPBAR_NOVO_CLIENTE = "IntelliBe - Novo Cliente";
+    private static final String TITULO_APPBAR_EDITA_CLIENTE = "IntelliBe - Editar Cliente";
     private static final int CODIGO_CAMERA = 567;
     private ClienteDAO clienteDAO;
     private TelefoneDAO telefoneDAO;
@@ -105,8 +105,6 @@ public class FormularioClienteActivity extends AppCompatActivity {
             }
         }
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 

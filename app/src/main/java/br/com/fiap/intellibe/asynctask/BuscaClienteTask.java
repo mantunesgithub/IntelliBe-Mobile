@@ -6,14 +6,14 @@ import java.util.List;
 
 import br.com.fiap.intellibe.database.dao.ClienteDAO;
 import br.com.fiap.intellibe.model.Cliente;
-import br.com.fiap.intellibe.ui.adapter.ListaClienteAdapter;
+import br.com.fiap.intellibe.ui.recyclerview.adapter.ListaClientesAdapter;
 
 public class BuscaClienteTask extends AsyncTask<Void, Void, List<Cliente>> {
 
     private final ClienteDAO dao;
-    private final ListaClienteAdapter adapter;
+    private final ListaClientesAdapter adapter;
 
-    public BuscaClienteTask(ClienteDAO dao, ListaClienteAdapter adapter) {
+    public BuscaClienteTask(ClienteDAO dao, ListaClientesAdapter adapter) {
         this.dao = dao;
         this.adapter = adapter;
     }

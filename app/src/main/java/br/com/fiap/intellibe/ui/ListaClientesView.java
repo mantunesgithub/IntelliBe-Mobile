@@ -8,13 +8,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import br.com.fiap.intellibe.R;
 import br.com.fiap.intellibe.asynctask.BuscaClienteTask;
 import br.com.fiap.intellibe.asynctask.BuscaTodosTelefonesDoClienteTask;
@@ -25,40 +23,33 @@ import br.com.fiap.intellibe.database.dao.TelefoneDAO;
 import br.com.fiap.intellibe.model.Cliente;
 import br.com.fiap.intellibe.model.Telefone;
 import br.com.fiap.intellibe.model.TipoTelefone;
-import br.com.fiap.intellibe.ui.activity.FormularioClienteActivity;
-import br.com.fiap.intellibe.ui.adapter.ListaClienteAdapter;
+import br.com.fiap.intellibe.ui.recyclerview.adapter.ListaClientesAdapter;
 
 public class ListaClientesView {
 
-    private final ListaClienteAdapter adapter;
+    private final ListaClientesAdapter adapter;
+    private final RecyclerView listaDeCliente;
     private final ClienteDAO dao;
-//    private final TelefoneDAO daoTelefone;
     private final Context context;
-    private List<Telefone> telefonesCliente;
 
-    public ListaClientesView(Context context) {
+    public ListaClientesView(Context context, ListaClientesAdapter adapter,
+                             RecyclerView listaDeCliente)  {
         this.context = context;
-        this.adapter = new ListaClienteAdapter(this.context);
-        dao = ClienteDatabase.getInstance(context)
-                .getClienteDAO();
+        this.adapter = adapter;
+        dao = ClienteDatabase.getInstance(context).getClienteDAO();
+        this.listaDeCliente = listaDeCliente;
     }
-
     public void atualizaClientes() {
         new BuscaClienteTask(dao, adapter).execute();
     }
-
     private void remove(Cliente cliente) {
         new RemoveClienteTask(dao, adapter, cliente).execute();
     }
 
-    public void configuraAdapter(ListView listaDeClientes) {
-        listaDeClientes.setAdapter(adapter);
-    }
-
     public void selecionaItemMenu(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo menuInfo =
-                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Cliente clienteEscolhido = adapter.getItem(menuInfo.position);
+        int position = ((ListaClientesAdapter) listaDeCliente.getAdapter()).getPosicao();
+        List<Cliente> cliente = adapter.getClientes();
+        Cliente clienteEscolhido = cliente.get(position);
 
         switch (item.getItemId()) {
             case R.id.activity_lista_clientes_menu_remover:
@@ -91,7 +82,6 @@ public class ListaClientesView {
                 .setNegativeButton("Não",
                         null).show();
     }
-
     private void  visitaSite(MenuItem item, Cliente clienteEscolhido) {
 
         Intent intentSite = new Intent(Intent.ACTION_VIEW);
@@ -120,13 +110,11 @@ public class ListaClientesView {
                 }).execute();
 
     }
-
     private void visualizaMapa(MenuItem item, Cliente clienteEscolhido) {
 
         Intent intentMapa = new Intent(Intent.ACTION_VIEW);
         intentMapa.setData(Uri.parse("geo:0,0?q=" + clienteEscolhido.getEndereco() +
                                             " " + clienteEscolhido.getCidade()));
-        //item.setIntent(intentMapa);
         context.startActivity(intentMapa);
     }
 
