@@ -1,9 +1,10 @@
 package br.com.fiap.intellibe.model;
 
+import android.util.Log;
+
 import java.io.Serializable;
 
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import br.com.fiap.intellibe.util.UtilCnpjCpf;
 
@@ -11,11 +12,11 @@ import br.com.fiap.intellibe.util.UtilCnpjCpf;
 public class Cliente implements Serializable {
     @PrimaryKey
     private Long cnpjOuCpf;
-    private Integer tipoPessoa;
-    private String nome;
-    private String site;
-    private String endereco;
-    private String complemento;
+    private String tipoCliente;
+    private String nomeCliente;
+    private String descricaoEmail;
+    private String descricaoEndereco;
+    private String complementoEndereco;
     private String bairro;
     private String cidade;
     private String estado;
@@ -29,16 +30,16 @@ public class Cliente implements Serializable {
     public Cliente() {
     }
 
-    public Cliente(Long cnpjOuCpf, Integer tipoPessoa, String nome, String site, String endereco,
-                   String complemento, String bairro, String cidade, String estado, String pais,
+    public Cliente(Long cnpjOuCpf, String tipoCliente, String nomeCliente, String descricaoEmail, String descricaoEndereco,
+                   String complementoEndereco, String bairro, String cidade, String estado, String pais,
                    String cep, String telefoneFixo, String telefoneCelular,
                    String telefoneComercial, String caminhoFoto) {
         this.cnpjOuCpf = cnpjOuCpf;
-        this.tipoPessoa = tipoPessoa;
-        this.nome = nome;
-        this.site = site;
-        this.endereco = endereco;
-        this.complemento = complemento;
+        this.tipoCliente = tipoCliente;
+        this.nomeCliente = nomeCliente;
+        this.descricaoEmail = descricaoEmail;
+        this.descricaoEndereco = descricaoEndereco;
+        this.complementoEndereco = complementoEndereco;
         this.bairro = bairro;
         this.cidade = cidade;
         this.estado = estado;
@@ -49,9 +50,6 @@ public class Cliente implements Serializable {
         this.telefoneComercial = telefoneComercial;
         this.caminhoFoto = caminhoFoto;
     }
-
-
-
     public Long getCnpjOuCpf() {
         return cnpjOuCpf;
     }
@@ -60,44 +58,48 @@ public class Cliente implements Serializable {
         this.cnpjOuCpf = cnpjOuCpf;
     }
 
-    public Integer getTipoPessoa() {
-        return tipoPessoa;
+    public String getTipoCliente() {
+        return tipoCliente;
     }
 
-    public void setTipoPessoa(Integer tipoPessoa)  {
-        this.tipoPessoa = tipoPessoa;
+    public void setTipoCliente(String tipoCliente) {
+//        Log.d("TipoCliente", "===========setTipoCliente: " + tipoCliente);
+        this.tipoCliente = tipoCliente.toUpperCase();
+//        if  (!(tipoCliente.equals("PJ"))  &&  !(tipoCliente.equals("PF"))  ) {
+//            throw new DominioException("Tipo de Cliente deve ser 'PJ' ou  'PF'");
+//        }
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeCliente() {
+        return nomeCliente;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
     }
 
-    public String getSite() {
-        return site;
+    public String getDescricaoEmail() {
+        return descricaoEmail;
     }
 
-    public void setSite(String site) {
-        this.site = site;
+    public void setDescricaoEmail(String descricaoEmail) {
+        this.descricaoEmail = descricaoEmail;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public String getDescricaoEndereco() {
+        return descricaoEndereco;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setDescricaoEndereco(String descricaoEndereco) {
+        this.descricaoEndereco = descricaoEndereco;
     }
 
-    public String getComplemento() {
-        return complemento;
+    public String getComplementoEndereco() {
+        return complementoEndereco;
     }
 
-    public void setComplemento(String complemento) {
-        this.complemento = complemento;
+    public void setComplementoEndereco(String complementoEndereco) {
+        this.complementoEndereco = complementoEndereco;
     }
 
     public String getBairro() {
@@ -171,13 +173,13 @@ public class Cliente implements Serializable {
         this.caminhoFoto = caminhoFoto;
     }
 
-    public Integer checkTipoPessoa(String tipoPessoa)  {
-        tipoPessoa = tipoPessoa.toUpperCase();
-        if  (  !(tipoPessoa.equals("PJ"))  &&  !(tipoPessoa.equals("PF"))  ) {
-            throw new DominioException("Tipo de pessoa deve ser 'PJ' ou  'PF'");
-        }
-        return (tipoPessoa.equals("PF")  ? 1 : 2);
-    }
+//    public Integer checkTipoPessoa(String tipoPessoa)  {
+//        tipoPessoa = tipoPessoa.toUpperCase();
+//        if  (  !(tipoPessoa.equals("PJ"))  &&  !(tipoPessoa.equals("PF"))  ) {
+//            throw new DominioException("Tipo de pessoa deve ser 'PJ' ou  'PF'");
+//        }
+//        return (tipoPessoa.equals("PF")  ? 1 : 2);
+//    }
 
      //  Verifica se cnpj ou cpf válido e Formata como String
      public Long checkCnpjCpf(String cnpjOuCpf) {
@@ -196,11 +198,11 @@ public class Cliente implements Serializable {
     public String toString() {
         return "Cliente{" +
                 "cnpjOuCpf=" + cnpjOuCpf +
-                ", tipoPessoa=" + tipoPessoa +
-                ", nome='" + nome + '\'' +
-                ", email='" + site + '\'' +
-                ", endereco='" + endereco + '\'' +
-                ", complemento='" + complemento + '\'' +
+                ", tipoCliente='" + tipoCliente + '\'' +
+                ", nomeCliente='" + nomeCliente + '\'' +
+                ", descricaoEmail='" + descricaoEmail + '\'' +
+                ", descricaoEndereco='" + descricaoEndereco + '\'' +
+                ", complementoEndereco='" + complementoEndereco + '\'' +
                 ", bairro='" + bairro + '\'' +
                 ", cidade='" + cidade + '\'' +
                 ", estado='" + estado + '\'' +
@@ -209,6 +211,7 @@ public class Cliente implements Serializable {
                 ", telefoneFixo='" + telefoneFixo + '\'' +
                 ", telefoneCelular='" + telefoneCelular + '\'' +
                 ", telefoneComercial='" + telefoneComercial + '\'' +
+                ", caminhoFoto='" + caminhoFoto + '\'' +
                 '}';
     }
 }

@@ -3,15 +3,14 @@ package br.com.fiap.intellibe.ui.recyclerview.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.fiap.intellibe.R;
@@ -31,22 +30,24 @@ public class ListaClientesAdapter extends
     private int posicao;
 
     public ListaClientesAdapter(Context context) {
+
         this.context = context;
         dao = ClienteDatabase.getInstance(context).getTelefoneDAO();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+
         this.onItemClickListener = onItemClickListener;
     }
     public List<Cliente> getClientes() {
+
         return clientes;
     }
-
-
     @NonNull
     @Override
     public ListaClientesAdapter.ClienteViewHolder onCreateViewHolder
-            (@NonNull ViewGroup parent, int viewType) {
+                        (@NonNull ViewGroup parent, int viewType) {
+
         View viewCriada = LayoutInflater.from(context)
                 .inflate(R.layout.item_cliente, parent, false);
         return new ClienteViewHolder(viewCriada);
@@ -54,14 +55,15 @@ public class ListaClientesAdapter extends
 
     @Override
     public void onBindViewHolder(ListaClientesAdapter.ClienteViewHolder holder, int position) {
+
         Cliente clienteDevolvido = clientes.get(position);
         holder.vincula(clienteDevolvido);
     }
     @Override
     public int getItemCount() {
+
         return clientes.size();
     }
-
     class ClienteViewHolder extends RecyclerView.ViewHolder {
 
         private Cliente cliente;
@@ -70,33 +72,30 @@ public class ListaClientesAdapter extends
         private final TextView nome;
 
         public ClienteViewHolder(@NonNull View itemView) {
+
             super(itemView);
             nome = itemView.findViewById(R.id.item_cliente_nome);
             cnpjCpf = itemView.findViewById(R.id.item_cliente_cnpj_cpf);
             foto = itemView.findViewById(R.id.item_cliente_foto);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onItemClick(cliente,
-                            ClienteViewHolder.this.getAbsoluteAdapterPosition());
-                }
-            });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    setPosicao(ClienteViewHolder.this.getAbsoluteAdapterPosition());
-                    return false;
-                }
+
+            itemView.setOnClickListener(v -> onItemClickListener.onItemClick(cliente,
+                    ClienteViewHolder.this.getAbsoluteAdapterPosition()));
+
+            itemView.setOnLongClickListener(v -> {
+                setPosicao(ClienteViewHolder.this.getAbsoluteAdapterPosition());
+                return false;
             });
         }
-
         public void vincula(Cliente cliente) {
+
             this.cliente = cliente;
-            nome.setText(cliente.getNome());
+            nome.setText(cliente.getNomeCliente());
             cnpjCpf.setText(UtilCnpjCpf.formatCPForCPNJ(cliente.getCnpjOuCpf(), false));
 
             String caminhoFoto = cliente.getCaminhoFoto();
             if (caminhoFoto != null) {
+                Log.d("Foto", "vincula:  caminho " + caminhoFoto);
+                Log.d("Foto1", "vincula:  cliente " + cliente);
                 Bitmap bitmap = BitmapFactory.decodeFile(caminhoFoto);
                 Bitmap bitmapReduzido = Bitmap.createScaledBitmap
                         (bitmap, 100, 100, true);
@@ -105,23 +104,28 @@ public class ListaClientesAdapter extends
             }
         }
     }
-
     public void atualiza(List<Cliente> clientes) {
+
         this.clientes.clear();
         this.clientes.addAll(clientes);
         notifyDataSetChanged();
     }
-
     public void remove(Cliente cliente) {
+
         clientes.remove(cliente);
         notifyDataSetChanged();
     }
+    public void adiciona(Cliente cliente) {
 
+        clientes.add(cliente);
+        notifyDataSetChanged();
+    }
     public int getPosicao() {
+
         return posicao;
     }
-
     public void setPosicao(int posicao) {
+
         this.posicao = posicao;
     }
 }

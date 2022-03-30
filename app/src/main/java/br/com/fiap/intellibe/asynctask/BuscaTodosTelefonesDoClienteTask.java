@@ -13,11 +13,11 @@ public class BuscaTodosTelefonesDoClienteTask extends AsyncTask<Void, Void, List
 
     private final TelefoneDAO telefoneDAO;
     private final Cliente cliente;
-    private final TelefonesDoAlunoEncontradosListener listener;
+    private final TelefonesDoClienteEncontradosListener listener;
 
     public BuscaTodosTelefonesDoClienteTask(TelefoneDAO telefoneDAO,
                                             Cliente cliente,
-                                            TelefonesDoAlunoEncontradosListener listener) {
+                                            TelefonesDoClienteEncontradosListener listener) {
         this.telefoneDAO = telefoneDAO;
         this.cliente = cliente;
         this.listener = listener;
@@ -34,7 +34,7 @@ public class BuscaTodosTelefonesDoClienteTask extends AsyncTask<Void, Void, List
         listener.quandoEncontrados(telefones);
     }
 
-    public interface TelefonesDoAlunoEncontradosListener {
+    public interface TelefonesDoClienteEncontradosListener {
         void quandoEncontrados(List<Telefone> telefones);
     }
 

@@ -7,7 +7,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import br.com.fiap.intellibe.model.Telefone;
-
 @Dao
 public interface TelefoneDAO {
     @Query("SELECT * FROM Telefone " +

@@ -2,6 +2,7 @@ package br.com.fiap.intellibe.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +32,6 @@ public class ListaClientesActivity extends AppCompatActivity {
         configuraFabNovoCliente();
         configuraRecyclerview();
     }
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -42,24 +42,24 @@ public class ListaClientesActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
         listaClientesView.selecionaItemMenu(item);
-
         return super.onOptionsItemSelected(item);
     }
     private void configuraFabNovoCliente() {
 
         FloatingActionButton botaoNovoCliente =
-                findViewById(R.id.activity_lista_clientes_fab_novo_cliente);
+                           findViewById(R.id.activity_lista_clientes_fab_novo_cliente);
         botaoNovoCliente.setOnClickListener(view -> abreFormularioModoInsereCliente());
     }
-
     private void abreFormularioModoInsereCliente() {
+
         startActivity(new Intent(this, FormularioClienteActivity.class));
     }
 
     @Override
     protected void onResume() {
+
         super.onResume();
-        listaClientesView.atualizaClientes();
+        listaClientesView.buscaClientes();
     }
 
     private void configuraRecyclerview() {
@@ -71,12 +71,14 @@ public class ListaClientesActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(Cliente cliente, int posicao) {
-                ListaClientesActivity.this.abreFormularioModoEditaCliente(cliente, posicao);
+                ListaClientesActivity.this
+                        .abreFormularioModoEditaCliente(cliente, posicao);
             }
         });
         registerForContextMenu(listaDeCliente);
     }
     private void abreFormularioModoEditaCliente(Cliente cliente, int posicao) {
+
         Intent vaiParaFormularioActivity = new Intent(ListaClientesActivity.this,
                 FormularioClienteActivity.class);
         vaiParaFormularioActivity.putExtra(ConstantesActivities.CHAVE_CLIENTE, cliente);
